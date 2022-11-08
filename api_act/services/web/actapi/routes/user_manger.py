@@ -36,10 +36,10 @@ class UserManager(Resource):
             if user_info["admin"] == True:
                 user.password = hashed_password
                 db.session.commit()
-                return make_response(jsonify({'message': 'Password updated!'}),302)
+                return make_response(jsonify({'message': 'Password updated!'}),200)
             else:
 
-                return make_response(jsonify({'message': 'Password changed!'}),302)
+                return make_response(jsonify({'message': 'Password changed!'}),200)
         return Response("'message': 'Error'", status=405)
 
     @jwt_required()
@@ -65,7 +65,7 @@ class UserManager(Resource):
             db.session.commit()
         except Exception as e:
             return make_response(jsonify({'message': 'Error accured during update'}), 401   )
-        return make_response(jsonify({'message': 'User updated!'}),301)
+        return make_response(jsonify({'message': 'User updated!'}),200)
 
 
 

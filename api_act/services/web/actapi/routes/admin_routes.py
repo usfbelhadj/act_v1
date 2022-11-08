@@ -27,13 +27,13 @@ class User(Resource):
                     if not  user.admin:
                         img = get_users_info(token, user.moodle_id)
                         if img == "" or img == False:
-                            img =  "data:image/png;base64," 
+                            img =  "https://www.gravatar.com/avatar/00000000000000000000000000000000?d=mp&f=y" 
                 except Exception as e:
                     return make_response(jsonify({"message": "Either the server is overloaded or there is an error in the application moodle"}), 500)
                 output = [{"image":img,"phone": user.phone, "public_id": user.public_id, "username": user.username, "email": user.email, "first_name": user.first_name,
                        "last_name": user.last_name, "score": user.score, "last_active": user.last_active, "moodle_id": user.moodle_id}for user in users if user.admin == False]
 
-            return jsonify({'users': output})
+            return make_response(jsonify({'users': output}),200)
         except Exception as e:
             abort(500)
 
@@ -68,7 +68,7 @@ class User(Resource):
             if str(e) == "Failed to create user at online dauphine!":
                 return make_response(jsonify({"message": "user name or email already exists"}), 500)
             return make_response(jsonify({'message': 'Failed to create user'}), 405)
-        return  make_response(jsonify({'message': f'New user created! password : {password}'}),201)
+        return  make_response(jsonify({'message': f'New user created! password : {password}'}),200)
 
 
 

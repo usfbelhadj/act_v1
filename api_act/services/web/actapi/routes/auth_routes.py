@@ -30,7 +30,7 @@ class Auth(Resource):
             except Exception as ex:
                 abort(500)
             db.session.commit()
-            return make_response(jsonify({'token': token}),201)
+            return make_response(jsonify({'token': token}),200)
         return make_response(jsonify({"message": "Wrong password"}), 401)
 
 
@@ -47,4 +47,4 @@ class Register(Resource):
             db.session.commit()
         except Exception as e:
             return make_response(jsonify({"message": "Error accured during registration"}), 405)
-        return make_response(jsonify({'message': 'registered successfully'}),302)
+        return make_response(jsonify({'message': 'registered successfully'}),200)
