@@ -8,17 +8,17 @@ import json
 
 class User(db.Model):
     id = db.Column(db.Integer, primary_key=True)
-    public_id = db.Column(db.String(50), unique=True)
+    public_id = db.Column(db.String(140), unique=True)
     moodle_id = db.Column(db.Integer)
-    username = db.Column(db.String(50))
-    email = db.Column(db.String(50))
-    password = db.Column(db.String(80))
-    first_name = db.Column(db.String(50))
-    last_name = db.Column(db.String(50))
+    username = db.Column(db.String(140))
+    email = db.Column(db.String(140))
+    password = db.Column(db.String(140))
+    first_name = db.Column(db.String(140))
+    last_name = db.Column(db.String(140))
     score = db.Column(db.Integer, default=0)
     admin = db.Column(db.Boolean)
     last_active = db.Column(db.DateTime)
-    phone = db.Column(db.String(50))
+    phone = db.Column(db.String(140))
 
     def __init__(self, username, password, firstname, lastname, email, token="", admin=False):
         self.public_id = str(uuid.uuid4())
