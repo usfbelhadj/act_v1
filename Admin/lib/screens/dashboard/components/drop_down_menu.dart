@@ -51,29 +51,29 @@ class DropDownMenu extends StatelessWidget {
           },
           value: 0,
         ),
-        PopupMenuItem(
-          onTap: () {
-            _controller.coursesList().then((value) {
-              print("*********************");
-              print(value["courses"]);
-              for (var i in value["courses"]) {
-                print(i["id"]);
-                print(i["name"]);
-              }
-              print("*********************");
-            });
-            _controller.enrolUser(actuary.publicID, "75").then((value) {
-              print(value);
-              if (!value) {
-                _showError("Failed!", context);
-              }
-              html.window.location.reload();
-              print('ok');
-            });
-          },
-          child: Text("enrol"),
-          value: 1,
-        ),
+        // PopupMenuItem(
+        //   onTap: () {
+        //     _controller.coursesList().then((value) {
+        //       print("*********************");
+        //       print(value["courses"]);
+        //       for (var i in value["courses"]) {
+        //         print(i["id"]);
+        //         print(i["name"]);
+        //       }
+        //       print("*********************");
+        //     });
+        //     _controller.enrolUser(actuary.publicID, "75").then((value) {
+        //       print(value);
+        //       if (!value) {
+        //         _showError("Failed!", context);
+        //       }
+        //       html.window.location.reload();
+        //       print('ok');
+        //     });
+        //   },
+        //   child: Text("enrol"),
+        //   value: 1,
+        // ),
         PopupMenuItem(
           onTap: () {
             _controller.enrolUser(actuary.publicID, "73").then((value) {

@@ -76,9 +76,9 @@ class Controller extends GetxController {
       body: jsonEncode(
         <String, String>{
           'email': email,
-          'firstName': firstName,
-          'lastName': lastName,
-          'phone': phone,
+          'firstname': firstName,
+          'lastname': lastName,
+          'phone1': phone,
         },
       ),
     );
