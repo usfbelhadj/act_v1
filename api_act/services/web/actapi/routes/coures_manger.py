@@ -4,7 +4,7 @@ from flask_jwt_extended import jwt_required, get_jwt_identity, get_jwt
 from actapi.Config import TOKEN as token
 from flask_restful import Resource
 from actapi.models.user import User as user_model
-
+from actapi import db
 
 class UserCourse(Resource):
     @jwt_required()
@@ -17,7 +17,16 @@ class UserCourse(Resource):
         id = get_jwt_identity()
         moodle_id = get_jwt()["user"]['moodle_id']
         data = get_enrolled_courses(userid=moodle_id, token=token)
-        return make_response(jsonify({'Courses': data}),200)
+        score =sum([round(course['progress'] * 2,2) for course in data])
+        user = user_model.query.filter_by(id=id).first()
+        user.score = user.score + score
+        db.session.add(user)
+        db.session.commit()
+        return make_response(jsonify({'Courses': data,"score":user.score}),200)
+
+        
+        
+        
 
 
 class CourseManager(Resource):
