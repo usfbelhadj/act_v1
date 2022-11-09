@@ -48,6 +48,7 @@ class User(Resource):
             return make_response(jsonify({"message": "Unauthorized"}), 401)
         data = request.get_json()
         password = password_generator()
+        print(password)
         try:
             new_user = user_model(username=data['username'], email=data['email'],
                                   password=password, firstname=data["firstName"], lastname=data["lastName"], token=token)

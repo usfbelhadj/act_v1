@@ -1,10 +1,11 @@
-from actapi.util import  enrol_user, get_enrolled_courses,remove_user_enrolment
+from actapi.util import enrol_user, get_enrolled_courses, remove_user_enrolment
 from flask import request, jsonify, Response, make_response
 from flask_jwt_extended import jwt_required, get_jwt_identity, get_jwt
 from actapi.Config import TOKEN as token
 from flask_restful import Resource
 from actapi.models.user import User as user_model
 from actapi import db
+
 
 class UserCourse(Resource):
     @jwt_required()
@@ -17,16 +18,13 @@ class UserCourse(Resource):
         id = get_jwt_identity()
         moodle_id = get_jwt()["user"]['moodle_id']
         data = get_enrolled_courses(userid=moodle_id, token=token)
-        score =sum([round(course['progress'] * 2,2) for course in data])
+        score_p = sum([round(course['progress'] * 2, 2) for course in data])
         user = user_model.query.filter_by(id=id).first()
-        user.score = user.score + score
+        score = 100 + score_p
+        user.score = score
         db.session.add(user)
         db.session.commit()
-        return make_response(jsonify({'Courses': data,"score":user.score}),200)
-
-        
-        
-        
+        return make_response(jsonify({'Courses': data, "score": user.score}), 200)
 
 
 class CourseManager(Resource):
@@ -51,9 +49,10 @@ class CourseManager(Resource):
         res = enrol_user(token=token, userid=user.moodle_id,
                          courseid=course_id)
         if (res != -1):
-            return make_response(jsonify({'message': 'Success!'}),200)
+            return make_response(jsonify({'message': 'Success!'}), 200)
         else:
             return Response("'message': 'Failed!'", status=405)
+
     @jwt_required()
     def delete(self):
         """
@@ -71,13 +70,15 @@ class CourseManager(Resource):
                 return make_response(jsonify({"message": "Bad Request"}), 400)
             user = user_model.query.filter_by(public_id=public_id).first()
             if user:
-                response = remove_user_enrolment(token=token,userid=user.moodle_id,courseid=course_id)
+                response = remove_user_enrolment(
+                    token=token, userid=user.moodle_id, courseid=course_id)
                 if response == False:
-                    return make_response(jsonify({'message': 'Failed!'}),405)
-                return make_response(jsonify({'message': 'Success!'}),200)
+                    return make_response(jsonify({'message': 'Failed!'}), 405)
+                return make_response(jsonify({'message': 'Success!'}), 200)
             else:
-                return make_response(jsonify({'message': 'User not found!'}),404)
+                return make_response(jsonify({'message': 'User not found!'}), 404)
         return make_response(jsonify({"message": "Unauthorized"}), 401)
+
 
 class ScoreManage(Resource):
     @jwt_required()
@@ -88,7 +89,7 @@ class ScoreManage(Resource):
         overall_score = [{"CourseName": course['displayname'],
                           "progress":course["progress"], "id":course['id']}for course in data]
         if course_id == "all":
-            return make_response(jsonify({"overall_score": overall_score}),200)
+            return make_response(jsonify({"overall_score": overall_score}), 200)
         else:
             for course in overall_score:
                 if course["id"] == int(course_id):
